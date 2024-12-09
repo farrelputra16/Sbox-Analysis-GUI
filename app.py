@@ -48,68 +48,159 @@ st.set_page_config(page_title="S-Box Analysis", page_icon="🔐", layout="wide")
 # Menambahkan latar belakang dan animasi
 st.markdown("""
     <style>
-        body {
-            background: linear-gradient(to right, #00c6ff, #0072ff);
-            font-family: 'Roboto', sans-serif;
-            color: #fff;
-            margin: 0;
-            padding: 0;
-        }
-        .header {
-            text-align: center;
-            padding: 50px;
-            animation: slideIn 1.5s ease-out;
-        }
-        .header h1 {
-            font-size: 50px;
-            color: #fff;
-        }
-        .header p {
-            font-size: 20px;
-            color: #d3d3d3;
-        }
-        @keyframes slideIn {
-            0% { transform: translateY(-50px); opacity: 0; }
-            100% { transform: translateY(0); opacity: 1; }
-        }
-        .stButton > button {
-            background-color: #ff8c00;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            font-size: 18px;
-            padding: 10px 30px;
-            transition: all 0.3s ease;
-        }
-        .stButton > button:hover {
-            background-color: #ff6000;
-            transform: scale(1.05);
-        }
-        .stRadio > div {
-            background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            margin: 10px 0;
-            padding: 15px;
-            transition: background-color 0.3s ease;
-        }
-        .stRadio > div:hover {
-            background-color: rgba(255, 255, 255, 0.3);
-        }
-        .stTextArea > div {
-            background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-        }
-    </style>
+    body {
+        background-color: #1a1a2e;
+        font-family: 'Press Start 2P', cursive;
+        color: #e0e0e0;
+        overflow-x: hidden;
+    }
+
+    /* Pixel Art Border */
+    .pixel-border {
+        border: 4px solid #4a4e69;
+        border-image: 
+            repeating-linear-gradient(
+                45deg, 
+                #4a4e69 0, 
+                #4a4e69 2px, 
+                transparent 2px, 
+                transparent 10px
+            ) 1;
+        box-shadow: 0 0 10px rgba(74, 78, 105, 0.5);
+    }
+
+    /* Pixel Button Styles */
+    .pixel-button {
+        background-color: #6a4c93;
+        color: #ffffff;
+        border: 2px solid #392b58;
+        font-family: 'Press Start 2P';
+        text-transform: uppercase;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .pixel-button::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+            120deg, 
+            transparent, 
+            rgba(255,255,255,0.3), 
+            transparent
+        );
+        transition: all 0.5s;
+    }
+
+    .pixel-button:hover::before {
+        left: 100%;
+    }
+
+    /* Pixel Input Styles */
+    .pixel-input {
+        background-color: #16213e;
+        border: 2px solid #0f3460;
+        color: #e94560;
+        font-family: 'Press Start 2P';
+        font-size: 12px;
+    }
+
+    /* Pixel Radio Styles */
+    .pixel-radio {
+        background-color: #0f3460;
+        border-radius: 10px;
+        padding: 10px;
+        margin: 10px 0;
+    }
+
+    /* Pixel Animation */
+    @keyframes pixelate {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+        100% { transform: scale(1); }
+    }
+
+    .pixel-animate {
+        animation: pixelate 1.5s infinite;
+    }
+
+    /* Retro Scan Line Effect */
+    .scan-line {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        background: 
+            repeating-linear-gradient(
+                0deg,
+                rgba(0, 0, 0, 0.15),
+                rgba(0, 0, 0, 0.15) 1px,
+                transparent 1px,
+                transparent 2px
+            );
+        z-index: 9999;
+    }
+    .sbox-input textarea {
+        background-color: #16213e !important; 
+        color: #e94560 !important; 
+        border: 3px solid #0f3460 !important; 
+        font-family: 'Press Start 2P', monospace !important;
+        font-size: 10px !important;
+        padding: 10px !important;
+        border-radius: 5px !important;
+        box-shadow: 
+            inset 0 0 10px rgba(233,69,96,0.2),
+            0 0 15px rgba(15,52,96,0.3) !important;
+        text-shadow: 1px 1px 2px rgba(233,69,96,0.3) !important;
+        line-height: 1.5 !important;
+        letter-spacing: 0.5px !important;
+        transition: all 0.3s ease !important;
+    }
+
+    .sbox-input textarea:focus {
+        outline: none !important;
+        border-color: #e94560 !important;
+        box-shadow: 
+            0 0 15px rgba(233,69,96,0.5),
+            inset 0 0 10px rgba(15,52,96,0.3) !important;
+    }
+</style>
 """, unsafe_allow_html=True)
 
-# Header dengan animasi
-st.markdown('<div class="header"><h1>S-Box Analysis GUI</h1><p>Uji keamanan S-Box dengan berbagai metriks pengujian</p></div>', unsafe_allow_html=True)
+st.markdown("""
+    <div class="scan-line"></div>
+""", unsafe_allow_html=True)
 
-# Pilih Input Data
+st.markdown("""
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+""", unsafe_allow_html=True)
+
+# Modifikasi header
+st.markdown("""
+    <div class="header pixel-animate" style="text-align: center;">
+        <h1 style="font-family: 'Press Start 2P'; color: #e94560; text-align: center;">
+            🔒 S-Box Crypto Analyzer
+        </h1>
+        <p style="font-family: 'Press Start 2P'; color: #4a4e69; text-align: center;">
+            Retro Cryptographic Evaluation
+        </p>
+    </div>
+""", unsafe_allow_html=True)
+
+
 data_input_method = st.radio(
     "Pilih metode input data:",
     ["Manual Input", "Upload File (.xlsx)"],
-    label_visibility="collapsed"
+    label_visibility="collapsed",
+    key="input_method",
+    help="Select your data input method"
 )
 
 # Kolom untuk Input dan Pilih Jenis Pengujian
@@ -118,10 +209,11 @@ col1, col2 = st.columns([2, 1])
 with col1:
     if data_input_method == "Manual Input":
         sbox_input = st.text_area(
-            "Masukkan S-Box (Format: 256 int (0-255), pisahkan dengan koma):",
-            height=150,
-            help="Masukkan nilai S-Box dalam format angka antara 0 dan 255, pisahkan dengan koma"
-        )
+    "Masukkan S-Box (Format: 256 int (0-255), pisahkan dengan koma):",
+    height=150,
+    help="Input S-Box values separated by comma",
+    key="sbox_input",
+)
     elif data_input_method == "Upload File (.xlsx)":
         uploaded_file = st.file_uploader("Upload file Excel berisi S-Box:", type=["xlsx"])
         if uploaded_file:
@@ -170,6 +262,6 @@ if st.button("Jalankan Pengujian"):
 # Footer
 st.markdown("""
     <div style='text-align: center; color: #d3d3d3; font-size: 14px; padding-top: 20px;'>
-        <p>📚 Kelompok 7 Kriptografi Rombel 3 TI 22</p>aa
+        <p>📚 Kelompok 7 Kriptografi Rombel 3 TI 22</p>
     </div>
 """, unsafe_allow_html=True)
