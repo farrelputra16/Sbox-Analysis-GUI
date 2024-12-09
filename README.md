@@ -21,6 +21,6 @@ Berikut adalah langkah-langkah untuk menyiapkan proyek ini:
 Setelah itu jalankan program dengan perintah berikut:
 
 ```bash
-   python -m streamlit run app.py
+python -m streamlit run app.py
   ```
 
