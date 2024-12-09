@@ -18,3 +18,9 @@ Berikut adalah langkah-langkah untuk menyiapkan proyek ini:
    pip install xlsxwriter
   ```
 
+Setelah itu jalankan program dengan perintah berikut:
+
+```bash
+   python -m streamlit run app.py
+  ```
+
